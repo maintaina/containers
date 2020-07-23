@@ -1,0 +1,8 @@
+FROM docker.pkg.github.com/maintaina/containers/base:latest-runtime
+
+WORKDIR /srv/www/horde
+
+RUN composer require horde/content horde/passwd horde/turba horde/kronolith horde/nag horde/mnemo
+
+
+CMD ["/bin/bash"]
