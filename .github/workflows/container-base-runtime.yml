@@ -1,4 +1,4 @@
-name: Horde Composer Container Image
+name: Horde Base Runtime Image
 
 on:
   push:
