@@ -17,7 +17,7 @@ on:
     - cron: '15 1 * * *'
 
 env:
-  IMAGE_NAME: base
+  IMAGE_NAME: groupware
 
 jobs:
   # Run tests.

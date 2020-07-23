@@ -1,4 +1,4 @@
-name: Horde Groupware Runtime Image
+name: Horde Groupware with Webmail Runtime Image
 
 on:
   push:
@@ -14,10 +14,10 @@ on:
   pull_request:
 
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '0 2 * * *'
 
 env:
-  IMAGE_NAME: groupware
+  IMAGE_NAME: groupware-webmail
 
 jobs:
   # Run tests.
