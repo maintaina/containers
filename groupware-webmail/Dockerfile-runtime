@@ -1,0 +1,7 @@
+FROM docker.pkg.github.com/maintaina/containers/groupware:latest-runtime
+
+WORKDIR /srv/www/horde
+
+RUN composer require horde/imp horde/ingo
+
+CMD ["/bin/bash"]
