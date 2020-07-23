@@ -47,6 +47,9 @@ jobs:
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
+      - name: Use github token for composer
+        run: docker exec composer config -g github-oauth.github.com {{ secrets.GITHUB_TOKEN }}
+
       - name: Build image
         run: mkdir -p --mode=700 ~/.ssh && ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts && cd groupware/ && docker build . --file Dockerfile-runtime --tag image
 
