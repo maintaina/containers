@@ -48,7 +48,7 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
       - name: Build image
-        run: mkdir -p --mode=700 ~/.ssh && ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts && cd base/ && docker build . --file Dockerfile-runtime --tag image
+        run: mkdir -p --mode=700 ~/.ssh && ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts && cd groupware-webmail/ && docker build . --file Dockerfile-runtime --tag image
 
       - name: Push image
         run: |

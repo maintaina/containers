@@ -48,7 +48,7 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
       - name: Build image
-        run: ls -lah && cd base/ && ls -lah  && docker build . --file Dockerfile-apache --tag image
+        run: cd groupware/ && docker build . --file Dockerfile-apache --tag image
 
 
       - name: Push image
