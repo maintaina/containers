@@ -1,3 +1,4 @@
+---
 name: Horde Groupware with Webmail Apache Image
 
 on:
@@ -47,8 +48,16 @@ jobs:
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
+      - name: Prepare image build
+        run: |
+          mkdir -p --mode=700 ~/.ssh
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
       - name: Build image
-        run: mkdir -p --mode=700 ~/.ssh && ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts && cd groupware-webmail/ && docker build . --file Dockerfile-runtime --tag image
+        run: |
+          cd groupware-webmail/
+          docker build \
+            --file Dockerfile-apache --tag image .
 
       - name: Push image
         run: |
@@ -71,4 +80,3 @@ jobs:
 
           docker tag image $IMAGE_ID:$VERSION-runtime
           docker push $IMAGE_ID:$VERSION-runtime
-
