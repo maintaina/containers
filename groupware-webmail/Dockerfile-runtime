@@ -1,7 +1,11 @@
+# syntax = docker/dockerfile:1.0-experimental
 FROM docker.pkg.github.com/maintaina/containers/groupware:latest-runtime
 
 WORKDIR /srv/www/horde
 
-RUN composer require horde/imp horde/ingo
+RUN --mount=type=secret,id=secrets,dst=/tmp/secrets.sh source /tmp/secrets.sh \
+    && composer require horde/imp horde/ingo \
+    && composer clear-cache \
+    && unset COMPOSER_PAT
 
 CMD ["/bin/bash"]
