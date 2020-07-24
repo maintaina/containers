@@ -4,6 +4,7 @@ FROM docker.pkg.github.com/maintaina/containers/groupware:latest-runtime
 WORKDIR /srv/www/horde
 
 RUN --mount=type=secret,id=secrets,dst=/tmp/secrets.sh source /tmp/secrets.sh \
+    && composer config repositories.pear pear "https://pear.php.net" \
     && composer require horde/imp horde/ingo \
     && composer clear-cache \
     && unset COMPOSER_PAT
