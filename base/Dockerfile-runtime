@@ -1,8 +1,12 @@
 FROM docker.io/opensuse/tumbleweed:latest
 
+# set working directory for all subsequent steps (and images derived from this one)
+WORKDIR /srv/www/horde
+
 # installs required packages git, composer, unzip and php extensions
 # then cleans up zypper cache
 # then creates the target directory for horde and clones the deployment
+
 RUN zypper --non-interactive install --no-recommends --no-confirm \
     git-core \
     gzip \
@@ -37,12 +41,13 @@ RUN zypper --non-interactive install --no-recommends --no-confirm \
     unzip \
     && zypper clean -a \
     && mkdir -p /srv/www/horde \
-    && git clone https://github.com/maintaina-com/horde-deployment /srv/www/horde
+    && mkdir -p /srv/original_config/apps \
+    && git clone https://github.com/maintaina-com/horde-deployment /srv/www/horde \
+    && composer install -n && rm -rf /root/.composer/cache \
+    && chown -R wwwrun:www /srv/www/horde
 
-# set working directory for all subsequent steps (and images derived from this one)
-WORKDIR /srv/www/horde
+COPY ./createUser.php /srv/www/horde/web/horde/bin/createUser.php
+COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
 
-# install php dependencies with composer and remove cache afterwards
-RUN composer install -n && rm -rf /root/.composer/cache
-
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/bin/bash"]
