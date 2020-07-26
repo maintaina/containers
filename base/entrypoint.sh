@@ -6,18 +6,20 @@ cd /srv/original_config/apps
 for app in *
 do
     app=${app%*/}
-    for file in $app/*
+    cd $app
+    for file in *
     do
-        if [ -f "/srv/www/horde/web/$file" ]; then
-            echo "$file already exists"
+        if [ -f "/srv/www/horde/web/$app/config/$file" ]; then
+            echo "$app/config/$file already exists"
         else 
-            cp $file /srv/www/horde/web/$file
+            cp -ar $file /srv/www/horde/web/$app/config/$file
         fi
     done
+    cd ..
 done
 
 ## ADD composer bin_dir to PATH
-PATH=$PATH:/srv/www/horde/vendor/bin
+export PATH=$PATH:/srv/www/horde/vendor/bin
 
 ## Replace some well-known template variables in the horde config
 if [[ -v EXPAND_CONFIG ]]; then
