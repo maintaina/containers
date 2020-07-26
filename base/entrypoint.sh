@@ -19,6 +19,9 @@ done
 #!/usr/bin/env bash
 echo "Config stage"
 
+## ADD composer bin_dir to PATH
+PATH=$PATH:/srv/www/horde/vendor/bin
+
 ## copy files from /srv/original_config/apps to config dirs
 cd /srv/original_config/apps
 for app in *     # list directories in the form "/tmp/dirname/"
