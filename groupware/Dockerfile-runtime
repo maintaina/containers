@@ -7,5 +7,6 @@ RUN --mount=type=secret,id=secrets,dst=/tmp/secrets.sh source /tmp/secrets.sh \
     && composer require horde/content horde/passwd horde/turba horde/kronolith horde/nag horde/mnemo \
     && composer clear-cache \
     && unset COMPOSER_PAT
+    && chown -R wwwrun:www /srv/www/horde/
 
 CMD ["/bin/bash"]
