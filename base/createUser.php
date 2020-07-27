@@ -13,4 +13,4 @@ $auth = $injector->getInstance('Horde_Core_Factory_Auth')->create();
 $password = $argv[2] ?? 'administrator';
 $user = $argv[1] ?? 'administrator';
 
-$auth->addUser('administrator', array('password' => 'administrator'));
+$auth->addUser($user, array('password' => $password));
