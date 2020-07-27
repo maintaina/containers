@@ -21,6 +21,13 @@ done
 ## ADD composer bin_dir to PATH
 echo "export PATH=\$PATH:/srv/www/horde/vendor/bin" > /root/.bashrc
 
+if [[ -v GITHUB_COMPOSER_TOKEN ]]
+then
+    echo "Configuring authentication to Github API for composer"
+    composer config -g github-oauth.github.com $GITHUB_COMPOSER_TOKEN
+fi
+
+
 ## Replace some well-known template variables in the horde config
 if [[ -v EXPAND_CONFIGS ]]; then
     echo "EXPANDING CONFIG VARIABLES"
@@ -42,8 +49,9 @@ if [[ -v EXPAND_CONFIGS ]]; then
     fi
 fi
 
-## TODO: BACKGROUND THIS and everything besides making apache pid one
+## TODO: BACKGROUND THIS and everything besides making the main process pid 1
 ## Wait for DB connection to succeed
+## TODO: Make this optional for No-DB scenarios
 echo "SHOW DATABASES" > /root/conntest.sql
 echo "WAITING FOR DB CONNECTION TO SUCCEED"
 echo "For new setups, this may take some time. You may see error messages"
