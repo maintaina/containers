@@ -13,6 +13,7 @@ do
             echo "$app/config/$file already exists"
         else 
             cp -ar $file /srv/www/horde/web/$app/config/$file
+            chown wwwrun /srv/www/horde/web/$app/config/$file
         fi
     done
     cd ..
@@ -65,7 +66,7 @@ echo "CONNECTION ESTABLISHED"
 ## Run migrations N times
 if [[ -v HORDE_MIGRATION_RUNS ]]
 then
-    for i in {1..$HORDE_MIGRATION_RUNS}
+    for ((i=1;i<=HORDE_MIGRATION_RUNS;i++))
     do
         echo "Running Horde Schema Migrations: #$i"
         php /srv/www/horde/web/horde/bin/horde-db-migrate
