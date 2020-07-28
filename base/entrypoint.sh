@@ -22,7 +22,7 @@ done
 ## ADD composer bin_dir to PATH
 echo "export PATH=\$PATH:/srv/www/horde/vendor/bin" > /root/.bashrc
 
-if [[ -v GITHUB_COMPOSER_TOKEN ]]
+if [[ ! -z $GITHUB_COMPOSER_TOKEN ]]
 then
     echo "Configuring authentication to Github API for composer"
     composer config -g github-oauth.github.com $GITHUB_COMPOSER_TOKEN
