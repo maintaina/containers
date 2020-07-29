@@ -39,6 +39,8 @@ RUN zypper --non-interactive install --no-recommends --no-confirm \
     php7-xmlwriter \
     tar \
     unzip \
+    ## This step is needed because the docker base image's locale is crippled to save space. Horde NLS needs them
+    && zypper --non-interactive install --no-recommends --no-confirm -f glibc-locale glibc-locale-base \
     && zypper clean -a \
     && mkdir -p /srv/www/horde \
     && mkdir -p /srv/original_config/apps \
