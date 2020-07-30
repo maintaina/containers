@@ -19,8 +19,24 @@ do
     cd ..
 done
 
+## FIXUP VARIABLES IF THEY CONTAIN LEADING/TRAILING QUOTES
+
+tmp="${GITHUB_COMPOSER_TOKEN%\"}"
+tmp="${tmp#\"}"
+export GITHUB_COMPOSER_TOKEN=$tmp
+
+tmp="${MYSQL_PASSWORD%\"}"
+tmp="${tmp#\"}"
+export MYSQL_PASSWORD=$tmp
+
+tmp="${HORDE_ADMIN_PASSWORD%\"}"
+tmp="${tmp#\"}"
+export HORDE_ADMIN_PASSWORD=$tmp
+
+
 ## ADD composer bin_dir to PATH
 echo "export PATH=\$PATH:/srv/www/horde/vendor/bin" > /root/.bashrc
+
 
 if [[ ! -z $GITHUB_COMPOSER_TOKEN ]]
 then
