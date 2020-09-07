@@ -1,4 +1,4 @@
-FROM docker.pkg.github.com/maintaina/containers/groupware-webmail:latest-runtime
+FROM ghcr.io/maintaina/containers/groupware-webmail:latest-runtime
 
 RUN zypper --non-interactive install --no-confirm apache2 apache2-mod_php7 \
     && zypper clean -a \
