@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
 
       # usually, the base image used in Dockerfile is pulled automatically during build
       # however, there is an issue that prevents buildkit from pulling images from
@@ -63,7 +63,7 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
 
           # pull the image
-          docker pull docker.pkg.github.com/${{ github.repository }}/base:$VERSION-runtime
+          docker pull ghcr.io/${{ github.repository }}/base:$VERSION-runtime
 
       - name: Prepare image build
         run: |
@@ -83,7 +83,7 @@ jobs:
 
       - name: Push image
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+          IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
@@ -102,4 +102,3 @@ jobs:
 
           docker tag image $IMAGE_ID:$VERSION-runtime
           docker push $IMAGE_ID:$VERSION-runtime
-
