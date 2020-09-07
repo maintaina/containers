@@ -48,11 +48,11 @@ jobs:
         run: mkdir -p --mode=700 ~/.ssh && ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts && cd base/ && docker build . --file Dockerfile-runtime --tag image
 
       - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push image
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+          IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
@@ -71,4 +71,3 @@ jobs:
 
           docker tag image $IMAGE_ID:$VERSION-runtime
           docker push $IMAGE_ID:$VERSION-runtime
-
