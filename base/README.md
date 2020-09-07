@@ -9,17 +9,16 @@ The repository contains a Github Actions workflow to automatically build the con
 
 To build a another image on top of this one, use the following in your `Dockerfile`:
 ```Docker
-FROM docker.pkg.github.com/maintaina/containers/base:latest
+FROM ghcr.io/maintaina/containers/base:latest
 ```
 
 To start a container based on this image, run:
 ```bash
-docker run -it --name my-horde-container docker.pkg.github.com/maintaina/containers/base:latest
+docker run -it --name my-horde-container ghcr.io/maintaina/containers/base:latest
 ```
 
-You may need to be logged into the Github Docker Registry to pull the image, even if it's a public image.
-
-https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages
+The image is stored as a public image in Github's new Container Registry. It can
+be pulled without logging into the registry.
 
 ## Supported config variables
 
