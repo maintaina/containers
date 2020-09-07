@@ -9,13 +9,37 @@ The repository contains a Github Actions workflow to automatically build the con
 
 To build a another image on top of this one, use the following in your `Dockerfile`:
 ```Docker
-FROM ghcr.io/maintaina/containers/base:latest
+FROM docker.pkg.github.com/maintaina/containers/base:latest
 ```
 
 To start a container based on this image, run:
 ```bash
-docker run -it --name my-horde-container ghcr.io/maintaina/containers/base:latest
+docker run -it --name my-horde-container docker.pkg.github.com/maintaina/containers/base:latest
 ```
+
+You may need to be logged into the Github Docker Registry to pull the image, even if it's a public image.
+
+https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages
+
+## Supported config variables
+
+### GITHUB_COMPOSER_TOKEN 
+This variable allows to inject a github token into composer globally. This may be required to circumvent API limits when installing additional content.
+
+### MYSQL related variables
+
+These are used by entrypoint to inject a mysql database connection into the config file template. 
+
+MYSQL_PASSWORD 
+MYSQL_DATABASE
+MYSQL_HOSTNAME
+MYSQL_USER
+MYSQL_PASSWORD
+
+### HORDE_MIGRATION_RUNS
+
+This governs if and how many times the entry point should run the horde migration script.
+
 
 ## Further information
 
