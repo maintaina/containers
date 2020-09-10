@@ -89,10 +89,10 @@ then
    done
 fi
 
-## TODO: Inject initial horde user
+# Inject initial user
 if [[ -v HORDE_ADMIN_USER ]]; then
     echo "Injecting Admin User $HORDE_ADMIN_USER"
-    php /srv/www/horde/web/horde/bin/createUser.php $HORDE_ADMIN_USER $HORDE_ADMIN_PASSWORD &> /dev/null
+    php /srv/www/horde/vendor/bin/hordectl patch user $HORDE_ADMIN_USER $HORDE_ADMIN_PASSWORD
 fi
 
 echo "Handing over to pid 1 command"

@@ -49,9 +49,8 @@ RUN zypper --non-interactive install --no-recommends --no-confirm \
     && composer install -n && rm -rf /root/.composer/cache \
     && chown -R wwwrun:www /srv/www/horde
 
-COPY ./createUser.php /srv/www/horde/web/horde/bin/createUser.php
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh  
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/bin/bash"]
