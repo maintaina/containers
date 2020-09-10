@@ -47,9 +47,53 @@ jobs:
       - name: Log into registry
         run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
 
-      ## this is workaroundish. Otherwise we would get the content of the past runtime. Remove once we have a decent trigger
-      - name: Wait for runtime container
-        run: sleep 600
+      ## Spend time in a useful way
+      - name: Pull most recent image
+        run: docker pull ghcr.io/maintaina/containers/base:latest-runtime
+
+      - name: Check if the base image is old and try a couple of times if a newer image gets available
+        run: |
+          IMAGE=ghcr.io/${{ github.repository }}/base:latest-runtime
+          echo "Base image is: $IMAGE"
+          AGE_THRESHOLD=3600
+          SLEEP_DURATION=180
+          SLEEP_REP=10
+
+          get_image_age()
+          {
+            IMAGE_ISODATE=`docker inspect $1 | jq -r .[0].Created`;
+            IMAGE_TS=`date -d $IMAGE_ISODATE +%s`
+            CURRENTDATE_TS=`date +%s`
+            let DIFF_SEC=CURRENTDATE_TS-IMAGE_TS
+            export DIFF_SEC
+          }
+
+          sleep_and_pull()
+          {
+              IMAGE_AGE=$1
+              if [ "$IMAGE_AGE" -gt "$AGE_THRESHOLD" ]; then
+                  echo "Base Image Age $IMAGE_AGE seconds is above threshold $AGE_THRESHOLD - Let's wait a moment and try again"
+                  sleep $SLEEP_DURATION
+                  docker pull $IMAGE
+                  RETURN=1
+              else
+                  echo "Base Image seems recent enough - let's go"
+                  RETURN=0
+              fi
+          }
+
+          echo "Verify if we have a recent base image"
+          for (( i=1; i<=10; i++ ))
+          do
+              echo "Run $i of 10"
+              get_image_age $IMAGE
+              sleep_and_pull DIFF_SEC
+              if [ "$RETURN" -eq 0 ];
+              then
+                  break;
+              fi
+          done 
+          echo "We are OK to build"
 
       - name: Build image
         run: ls -lah && cd base/ && ls -lah  && docker build . --file Dockerfile-apache --tag image
@@ -76,4 +120,7 @@ jobs:
 
           docker tag image $IMAGE_ID:$VERSION-apache
           docker push $IMAGE_ID:$VERSION-apache
+          # Let's use latest as an alias for the apache image
+          docker tag image $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
 
