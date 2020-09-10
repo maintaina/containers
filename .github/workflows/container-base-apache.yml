@@ -87,12 +87,12 @@ jobs:
           do
               echo "Run $i of 10"
               get_image_age $IMAGE
-              sleep_and_pull DIFF_SEC
+              sleep_and_pull $DIFF_SEC
               if [ "$RETURN" -eq 0 ];
               then
                   break;
               fi
-          done 
+          done
           echo "We are OK to build"
 
       - name: Build image
