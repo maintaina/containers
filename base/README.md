@@ -22,14 +22,14 @@ be pulled without logging into the registry.
 
 ## Supported config variables
 
-### GITHUB_COMPOSER_TOKEN 
+### GITHUB_COMPOSER_TOKEN
 This variable allows to inject a github token into composer globally. This may be required to circumvent API limits when installing additional content.
 
 ### MYSQL related variables
 
 These are used by entrypoint to inject a mysql database connection into the config file template. 
 
-MYSQL_PASSWORD 
+MYSQL_PASSWORD
 MYSQL_DATABASE
 MYSQL_HOSTNAME
 MYSQL_USER

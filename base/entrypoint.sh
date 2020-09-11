@@ -89,11 +89,16 @@ then
    done
 fi
 
+## TODO: Check somewhere for yaml files and import them with hordectl before injecting the admin
+
+
 # Inject initial user
 if [[ -v HORDE_ADMIN_USER ]]; then
     echo "Injecting Admin User $HORDE_ADMIN_USER"
     php /srv/www/horde/vendor/bin/hordectl patch user $HORDE_ADMIN_USER $HORDE_ADMIN_PASSWORD
 fi
+
+## TODO: Check somewhere for yaml files and import them with hordectl
 
 echo "Handing over to pid 1 command"
 exec "$@"
