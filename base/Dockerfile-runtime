@@ -45,8 +45,8 @@ RUN zypper --non-interactive install --no-recommends --no-confirm \
     && zypper clean -a \
     && mkdir -p /srv/www/horde \
     && mkdir -p /srv/original_config/apps \
-    && git clone https://github.com/maintaina-com/horde-deployment /srv/www/horde \
-    && composer install -n && rm -rf /root/.composer/cache \
+    && git clone --depth 5 https://github.com/maintaina-com/horde-deployment /srv/www/horde \
+    && composer install -n ; composer clear-cache ; rm -rf /root/.composer/cache \
     && chown -R wwwrun:www /srv/www/horde
 
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
