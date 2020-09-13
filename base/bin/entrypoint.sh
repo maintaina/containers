@@ -2,22 +2,7 @@
 echo "Config stage"
 
 ## copy files from /srv/original_config/apps to config dirs
-cd /srv/original_config/apps
-for app in *
-do
-    app=${app%*/}
-    cd $app
-    for file in *
-    do
-        if [ -f "/srv/www/horde/web/$app/config/$file" ]; then
-            echo "$app/config/$file already exists"
-        else 
-            cp -ar $file /srv/www/horde/web/$app/config/$file
-            chown wwwrun /srv/www/horde/web/$app/config/$file
-        fi
-    done
-    cd ..
-done
+/usr/local/bin/copy-original-configs
 
 ## FIXUP VARIABLES IF THEY CONTAIN LEADING/TRAILING QUOTES
 
@@ -66,6 +51,13 @@ if [[ -v EXPAND_CONFIGS ]]; then
     fi
 fi
 
+## if a composer-on-bootstrap.sh hook exists, run it
+## The hook should take care itself if it should only run for the very first startup.
+if [[ -f "/usr/local/bin/composer-on-bootstrap"]]; then
+    echo "Found composer-on-bootstrap. Running ..."
+    /usr/local/bin/composer-on-bootstrap
+fi
+
 ## TODO: BACKGROUND THIS and everything besides making the main process pid 1
 ## Wait for DB connection to succeed
 ## TODO: Make this optional for No-DB scenarios
@@ -89,16 +81,14 @@ then
    done
 fi
 
-## TODO: Check somewhere for yaml files and import them with hordectl before injecting the admin
+## if hordectl is installed and /srv/original_config/hordectl exists, run all yml files through it
+/usr/local/bin/run-hordectl
 
-
-# Inject initial user
+# Inject initial user or change his password if he already exists
 if [[ -v HORDE_ADMIN_USER ]]; then
     echo "Injecting Admin User $HORDE_ADMIN_USER"
     php /srv/www/horde/vendor/bin/hordectl patch user $HORDE_ADMIN_USER $HORDE_ADMIN_PASSWORD
 fi
-
-## TODO: Check somewhere for yaml files and import them with hordectl
 
 echo "Handing over to pid 1 command"
 exec "$@"

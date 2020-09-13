@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+## copy files from /srv/original_config/apps to config dirs
+if [[ ! -d "/srv/original_config/hordectl" ]]; then
+    exit 0;
+fi
+if [[ ! -e "/srv/www/horde/vendor/bin/hordectl" ]]; then
+    exit 0;
+fi
+
+echo "Found /srv/original_config/hordectl dir and /srv/www/horde/vendor/bin/hordectl is installed"
+for file in $(ls -1 /srv/original_config/hordectl/*.yml); do
+    echo Running "hordectl import -f $file"
+    /srv/www/horde/vendor/bin/hordectl import -f $file
+done
+
+

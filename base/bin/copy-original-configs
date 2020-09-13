@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+## copy files from /srv/original_config/apps to config dirs
+cd /srv/original_config/apps
+for app in *
+do
+    app=${app%*/}
+    cd $app
+    for file in *
+    do
+        if [ -f "/srv/www/horde/web/$app/config/$file" ]; then
+            echo "$app/config/$file already exists"
+        else
+            cp -ar $file /srv/www/horde/web/$app/config/$file
+            chown wwwrun /srv/www/horde/web/$app/config/$file
+        fi
+    done
+    cd ..
+done
+
+
