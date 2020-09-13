@@ -20,7 +20,12 @@ docker run -it --name my-horde-container ghcr.io/maintaina/containers/base:lates
 The image is stored as a public image in Github's new Container Registry. It can
 be pulled without logging into the registry.
 
-## Supported config variables
+##  Entrypoint Magic
+
+- See Supported Config Variables for basic configuration
+- If a dir /srv/original_configs/hordectl exists, all contained yml files are applied in alphabetical order
+
+## Supported Config Variables
 
 ### GITHUB_COMPOSER_TOKEN
 This variable allows to inject a github token into composer globally. This may be required to circumvent API limits when installing additional content.
