@@ -50,7 +50,7 @@ RUN zypper --non-interactive install --no-recommends --no-confirm \
     && chown -R wwwrun:www /srv/www/horde
 
 COPY ./bin/* /usr/local/bin/
-RUN chmod -r +x /usr/local/bin/*
+RUN chmod -R +x /usr/local/bin/*
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/bin/bash"]
