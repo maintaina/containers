@@ -32,6 +32,7 @@ RUN zypper --non-interactive install --no-recommends --no-confirm \
     php7-phar \
     php7-posix \
     php7-redis \
+    php7-soap \
     php7-sockets \
     php7-sqlite \
     php7-tokenizer \
