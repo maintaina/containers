@@ -53,7 +53,7 @@ fi
 
 ## if a composer-on-bootstrap.sh hook exists, run it
 ## The hook should take care itself if it should only run for the very first startup.
-if [[ -f "/usr/local/bin/composer-on-bootstrap"]]; then
+if [[ -f "/usr/local/bin/composer-on-bootstrap" ]]; then
     echo "Found composer-on-bootstrap. Running ..."
     /usr/local/bin/composer-on-bootstrap
 fi
