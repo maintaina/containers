@@ -17,7 +17,7 @@ To start a container based on this image, run:
 docker run -it --name my-horde-container ghcr.io/maintaina/containers/base:latest
 ```
 
-The image is stored as a public image in Github's new Container Registry. It can
+The image is stored as a public image in Github's ghcr.io Container Registry. It can
 be pulled without logging into the registry.
 
 ##  Entrypoint Magic
@@ -45,6 +45,11 @@ MYSQL_PASSWORD
 ### HORDE_MIGRATION_RUNS
 
 This governs if and how many times the entry point should run the horde migration script.
+
+### HORDE_ADMIN_USER and HORDE_ADMIN_PASSWORD
+
+This will inject a user and password into the authentication backend. If the user already exists, his password will be changed (if possible).
+The $conf['auth']['admin'] setting will not be changed. A default installation will assume the administrative account is called "administrator"
 
 
 ## Further information
