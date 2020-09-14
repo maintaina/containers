@@ -13,7 +13,7 @@ Flavors:
 
 ## groupware
 
-A horde environment with passwd, tasks (nag), addressbook (turba), calendar (kronolith), notes (mnemo)
+A horde environment with password changing app (passwd), tasks (nag), addressbook (turba), calendar (kronolith), notes (mnemo)
 
 Flavors:
  - runtime
