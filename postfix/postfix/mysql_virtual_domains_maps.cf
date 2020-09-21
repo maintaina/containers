@@ -1,0 +1,6 @@
+user = postfix
+password = postfix
+hosts = localhost
+dbname = postfix
+table = domain
+query = SELECT domain FROM domain WHERE domain='%s' and backupmx='0' and active='1'
