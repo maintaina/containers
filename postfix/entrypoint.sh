@@ -34,6 +34,9 @@ if [[ -v EXPAND_CONFIGS ]]; then
         # add the virtual_mailbox_* configs to the main.cf
         postconf virtual_mailbox_domains=mysql:/etc/postfix/mysql_virtual_mailbox_domains.cf
         postconf virtual_mailbox_maps=mysql:/etc/postfix/mysql_virtual_mailbox_maps.cf
+
+        # LTMP configuration
+        postconf virtual_transport=lmtp:inet:horde_dovecot:24
     fi
 fi
 exec "$@"
