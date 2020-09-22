@@ -37,6 +37,25 @@ if [[ -v EXPAND_CONFIGS ]]; then
 
         # LTMP configuration
         postconf virtual_transport=lmtp:inet:horde_dovecot:24
+
+	# update DB to set the passed domain information from the .env file
+	if [ ! -z "$HORDE_DOMAIN" ]; then
+            timeout=0
+            mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -D$MYSQL_DATABASE -h $MYSQL_HOSTNAME -e "select * from postfix_domains;"
+            con=$?
+            while [[ $con == 1 ]]; do
+                timeout+=1
+                if [[ $timeout == 5 ]] ; then
+                    exit;
+                fi
+
+                echo "sleeping as DB is not reachable yet"
+                sleep 5
+                mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -D$MYSQL_DATABASE -h $MYSQL_HOSTNAME -e "select * from postfix_domains;"
+                con=$?
+            done
+            mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -h $MYSQL_HOSTNAME -D $MYSQL_DATABASE -e "UPDATE postfix_domains SET name='$HORDE_DOMAIN' WHERE name='horde.dev.local';"
+	fi
     fi
 fi
 exec "$@"
