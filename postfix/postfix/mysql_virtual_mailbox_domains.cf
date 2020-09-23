@@ -2,4 +2,4 @@ user = postfix
 password = postfix
 hosts = localhost
 dbname = postfix
-query = SELECT domain FROM domain WHERE domain='%s' and backupmx='0' and active='1'
+query = SELECT 1 FROM postfix_domains WHERE name='%s'

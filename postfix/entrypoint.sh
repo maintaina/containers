@@ -35,8 +35,26 @@ if [[ -v EXPAND_CONFIGS ]]; then
         postconf virtual_mailbox_domains=mysql:/etc/postfix/mysql_virtual_mailbox_domains.cf
         postconf virtual_mailbox_maps=mysql:/etc/postfix/mysql_virtual_mailbox_maps.cf
 
-        # LTMP configuration
+        # LMTP configuration
         postconf virtual_transport=lmtp:inet:horde_dovecot:24
+
+        # submission port, smtp and sasl configuration
+        postconf smtpd_tls_security_level=none
+        postconf smtpd_sasl_auth_enable=yes
+        postconf smtpd_sasl_type=dovecot
+        postconf smtpd_sasl_path=inet:horde_dovecot:34343
+        postconf smtpd_sasl_security_options=noanonymous
+        postconf "smtpd_sasl_local_domain=\$myhostname"
+        postconf smtpd_client_restrictions=permit_sasl_authenticated,reject
+        #postconf smtpd_sender_login_maps=hash:/etc/postfix/virtual
+        #postconf smtpd_sender_restrictions=reject_sender_login_mismatch
+        postconf smtpd_recipient_restrictions=reject_non_fqdn_recipient,reject_unknown_recipient_domain,permit_sasl_authenticated,reject
+
+        # enable submission port
+        echo 'submission inet n       -       n       -       -       smtpd' >> /etc/postfix/master.cf
+
+        # enable logging to stdout
+        postconf maillog_file=/dev/stdout
     fi
 fi
 exec "$@"

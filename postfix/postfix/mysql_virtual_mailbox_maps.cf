@@ -2,4 +2,4 @@ user = postfix
 password = postfix
 hosts = localhost
 dbname = postfix
-query = SELECT maildir FROM mailbox WHERE username='%s' AND active='1'
+query = SELECT 1 FROM horde_users, postfix_domains WHERE user_uid='%u' AND name='%d'
