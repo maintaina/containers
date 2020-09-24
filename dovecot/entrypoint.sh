@@ -6,8 +6,17 @@ if [[ -v EXPAND_CONFIGS ]]; then
     if [[ -v MYSQL_DATABASE ]]; then
         echo "Setting env vars in /etc/dovecot/dovecot-sql.conf.ext"
         sed "s/connect = .*/connect = host=$MYSQL_HOSTNAME dbname=$MYSQL_DATABASE user=$MYSQL_USER password=$MYSQL_PASSWORD/g" /etc/dovecot/dovecot-sql.conf.ext > /etc/dovecot/tmp-sql.conf
-	cp /etc/dovecot/tmp-sql.conf /etc/dovecot/dovecot-sql.conf.ext
-	rm /etc/dovecot/tmp-sql.conf
+        cp /etc/dovecot/tmp-sql.conf /etc/dovecot/dovecot-sql.conf.ext
+        rm /etc/dovecot/tmp-sql.conf
+    fi
+
+    if [[ -v HORDE_DOMAIN ]]; then
+        echo "Setting mail domain in /etc/dovecot/dovecot-sql.conf.ext"
+        sed "s/horde.dev.local/$HORDE_DOMAIN/" \
+            /etc/dovecot/dovecot-sql.conf.ext > \
+            /etc/dovecot/tmp-sql.conf
+        cp /etc/dovecot/tmp-sql.conf /etc/dovecot/dovecot-sql.conf.ext
+        rm /etc/dovecot/tmp-sql.conf
     fi
 fi
 exec "$@"
