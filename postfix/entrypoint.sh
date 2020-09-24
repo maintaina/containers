@@ -36,13 +36,13 @@ if [[ -v EXPAND_CONFIGS ]]; then
         postconf virtual_mailbox_maps=mysql:/etc/postfix/mysql_virtual_mailbox_maps.cf
 
         # LMTP configuration
-        postconf virtual_transport=lmtp:inet:horde_dovecot:24
+        postconf virtual_transport=lmtp:inet:${CONTAINER_PREFIX}_dovecot:24
 
         # submission port, smtp and sasl configuration
         postconf smtpd_tls_security_level=none
         postconf smtpd_sasl_auth_enable=yes
         postconf smtpd_sasl_type=dovecot
-        postconf smtpd_sasl_path=inet:horde_dovecot:34343
+        postconf smtpd_sasl_path=inet:${CONTAINER_PREFIX}_dovecot:34343
         postconf smtpd_sasl_security_options=noanonymous
         postconf "smtpd_sasl_local_domain=\$myhostname"
         postconf smtpd_client_restrictions=permit_sasl_authenticated,reject
