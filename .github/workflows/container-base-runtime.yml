@@ -15,7 +15,8 @@ on:
 
   schedule:
     - cron: '0 0 * * *'
-
+  # the workflow can also be triggered manually
+  workflow_dispatch:
 env:
   IMAGE_NAME: base
 
