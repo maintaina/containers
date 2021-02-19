@@ -8,6 +8,7 @@ WORKDIR /srv/www/horde
 # then creates the target directory for horde and clones the deployment
 
 RUN zypper --non-interactive install --no-recommends --no-confirm \
+    shadow ## needed for groupadd in recent tumbleweed \
     git-core \
     gzip \
     php-composer \
