@@ -98,7 +98,7 @@ jobs:
 
 
       - name: Build image
-        run: cd groupware/ && docker build . --file Dockerfile-apache --tag image
+        run: cd groupware/ && docker build . --security-opt seccomp:unconfined --file Dockerfile-apache --tag image
 
 
       - name: Push image
