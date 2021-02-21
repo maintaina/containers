@@ -7,7 +7,7 @@ WORKDIR /srv/www/horde
 # then cleans up zypper cache
 # then creates the target directory for horde and clones the deployment
 
-RUN zypper ref && zypper --non-interactive install --no-recommends --no-confirm \
+RUN zypper --non-interactive ref && zypper --non-interactive install --no-recommends --no-confirm \
     git-core \
     gzip \
     php-composer \
