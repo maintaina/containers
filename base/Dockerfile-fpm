@@ -1,0 +1,11 @@
+FROM ghcr.io/maintaina/containers/base:latest-runtime
+
+RUN zypper --non-interactive install --no-confirm php7-fpm \
+    && zypper clean -a 
+
+## TODO: Deploy fpm config
+## TODO: Provide an entrypoint
+## TODO: How to handle exposing static content to frontend server in different container?
+
+EXPOSE 9000
+
