@@ -4,8 +4,7 @@ FROM ghcr.io/maintaina/containers/groupware:latest-runtime
 WORKDIR /srv/www/horde
 
 RUN --mount=type=secret,id=secrets,dst=/tmp/secrets.sh source /tmp/secrets.sh \
-    && composer config repositories.pear pear "https://pear.php.net" \
-    && composer require horde/imp horde/ingo \
+    && composer require horde/imp ^7 horde/ingo ^4 \
     && composer clear-cache \
     && chown -R wwwrun:www /srv/www/horde \
     && unset COMPOSER_PAT
