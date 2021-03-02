@@ -61,6 +61,8 @@ fi
 ## TODO: BACKGROUND THIS and everything besides making the main process pid 1
 ## Wait for DB connection to succeed
 ## TODO: Make this optional for No-DB scenarios
+if [[ ! -z $MYSQL_ADMIN_PASSWORD ]]
+then
 echo "SHOW DATABASES" > /root/conntest.sql
 echo "WAITING FOR DB CONNECTION TO SUCCEED"
 echo "For new setups, this may take some time. You may see error messages"
@@ -70,6 +72,7 @@ do
     echo "RETRYING"
 done
 echo "CONNECTION ESTABLISHED"
+fi
 
 ## Run migrations N times
 if [[ -v HORDE_MIGRATION_RUNS ]]
