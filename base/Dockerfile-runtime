@@ -50,6 +50,7 @@ RUN zypper --non-interactive ref && zypper --non-interactive install --no-recomm
     && mkdir -p /srv/www/horde \
     && mkdir -p /srv/original_config/apps \
     && git clone --depth 5 https://github.com/maintaina-com/horde-deployment -b FRAMEWORK_6_0 /srv/www/horde \
+    && composer require -n "horde/horde-installer-plugin:1.1.0" \
     && composer install -n ; composer clear-cache ; rm -rf /root/.composer/cache \
     && chown -R wwwrun:www /srv/www/horde
 
