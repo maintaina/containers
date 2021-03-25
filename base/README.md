@@ -1,7 +1,9 @@
 # horde-composer-docker
 
-A container image based on openSUSE Tumbleweed with the Composer-based Horde deployment from [maintaina-com/horde-deployment](https://github.com/maintaina-com/horde-deployment).
+A container image based on openSUSE Leap with the Composer-based Horde deployment from [maintaina-com/horde-deployment](https://github.com/maintaina-com/horde-deployment).
 The image does not contain a web server.
+
+The image uses Composer 2, installed as shown on [Composer's installation documentation](https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md).
 
 The repository contains a Github Actions workflow to automatically build the container image. The workflow is triggered when changes are pushed to the repository.
 

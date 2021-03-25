@@ -3,14 +3,18 @@ FROM opensuse/leap
 # set working directory for all subsequent steps (and images derived from this one)
 WORKDIR /srv/www/horde
 
-# installs required packages git, composer, unzip and php extensions
+# copy scripts, like entrypoint and various helper scripts into the image
+COPY ./bin/* /usr/local/bin/
+RUN chmod -R +x /usr/local/bin/*
+
+# installs required packages git, unzip and php extensions
 # then cleans up zypper cache
+# then installs composer
 # then creates the target directory for horde and clones the deployment
 
 RUN zypper --non-interactive ref && zypper --non-interactive install --no-recommends --no-confirm \
     git-core \
     gzip \
-    php-composer \
     php7 \
     php7-bcmath \
     php7-bz2 \
@@ -48,14 +52,11 @@ RUN zypper --non-interactive ref && zypper --non-interactive install --no-recomm
     && zypper --non-interactive -v install --no-recommends --no-confirm -f glibc-locale glibc-locale-base \
     && zypper clean -a \
     && mkdir -p /srv/www/horde \
+    && /usr/local/bin/composer-installer \
     && mkdir -p /srv/original_config/apps \
     && git clone --depth 5 https://github.com/maintaina-com/horde-deployment -b FRAMEWORK_6_0 /srv/www/horde \
-    && composer require -n "horde/horde-installer-plugin:1.1.0" \
     && composer install -n ; composer clear-cache ; rm -rf /root/.composer/cache \
     && chown -R wwwrun:www /srv/www/horde
-
-COPY ./bin/* /usr/local/bin/
-RUN chmod -R +x /usr/local/bin/*
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/bin/bash"]
