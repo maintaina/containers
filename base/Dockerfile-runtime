@@ -45,6 +45,7 @@ RUN zypper --non-interactive ref && zypper --non-interactive install --no-recomm
     php7-tokenizer \
     php7-xmlrpc \
     php7-xmlwriter \
+    php7-xmlreader \
     tar \
     unzip \
     gettext-tools \
