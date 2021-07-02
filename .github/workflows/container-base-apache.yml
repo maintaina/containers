@@ -12,7 +12,8 @@ on:
 
   # Run tests for any PRs.
   pull_request:
-
+  ## On manual dispatch
+  workflow_dispatch:
   schedule:
     - cron: '15 0 * * *'
 
