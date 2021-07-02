@@ -4,7 +4,7 @@ FROM ghcr.io/maintaina/containers/groupware:latest-runtime
 WORKDIR /srv/www/horde
 
 RUN --mount=type=secret,id=secrets,dst=/tmp/secrets.sh source /tmp/secrets.sh \
-    && composer require horde/imp ^7 horde/ingo ^4 \
+    && composer require horde/imp "^7 || dev-FRAMEWORK_6_0" horde/ingo "^4 || dev-FRAMEWORK_6_0" \
     && composer clear-cache \
     && chown -R wwwrun:www /srv/www/horde \
     && unset COMPOSER_PAT
