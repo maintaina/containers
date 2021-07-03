@@ -1,6 +1,7 @@
 # Containers
 
-This repository maintains several containers useful to deploy *developer versions* of Horde Framework or Horde Groupware.
+This repository maintains several container images useful to deploy *developer versions* of Horde Framework or Horde Groupware.
+These image builds are based on the openSUSE distribution's official container images.
 
 ## base
 
