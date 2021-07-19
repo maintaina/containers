@@ -17,4 +17,23 @@ do
     cd ..
 done
 
-
+## Replace some well-known template variables in the horde config
+if [[ -v EXPAND_CONFIGS ]]; then
+    echo "EXPANDING CONFIG VARIABLES"
+    if [[ -v MYSQL_DATABASE ]]; then
+        echo 
+        sed -i "s/conf\['sql'\]\['database'\].*/conf['sql']['database'] = '$MYSQL_DATABASE';/g" /srv/www/horde/web/horde/config/conf.php
+    fi
+    if [[ -v MYSQL_HOSTNAME ]]; then
+        echo 
+        sed -i "s/conf\['sql'\]\['hostspec'\].*/conf['sql']['hostspec'] = '$MYSQL_HOSTNAME';/g" /srv/www/horde/web/horde/config/conf.php
+    fi
+    if [[ -v MYSQL_USER ]]; then
+        echo 
+        sed -i "s/conf\['sql'\]\['username'\].*/conf['sql']['username'] = '$MYSQL_USER';/g" /srv/www/horde/web/horde/config/conf.php
+    fi
+    if [[ -v MYSQL_PASSWORD ]]; then
+        echo 
+        sed -i "s/conf\['sql'\]\['password'\].*/conf['sql']['password'] = '$MYSQL_PASSWORD';/g" /srv/www/horde/web/horde/config/conf.php
+    fi
+fi
