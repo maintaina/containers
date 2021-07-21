@@ -27,7 +27,8 @@ be pulled without logging into the registry.
 - See Supported Config Variables for basic configuration
 - If a directory /srv/original_configs/hordectl exists, all contained yml files are applied in alphabetical order
 - If a directory /srv/original_configs/apps/$app exists, contents will be copied to an app's $config dir. Existing files will not be overwritten.
-  You can re-run this any time using /usr/local/bin/copy-original-configs
+  The same files will also be copied to the presets/ directory.
+  You can re-run this any time using the /usr/local/bin/copy-original-configs script.
 
 ## Supported Config Variables
 
