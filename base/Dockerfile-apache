@@ -4,7 +4,8 @@ RUN zypper --non-interactive ref \
     && zypper --non-interactive install --no-confirm apache2 apache2-utils apache2-mod_php7 shadow fillup \
     && zypper clean -a \
     && a2enmod mod_php7 \
-    && a2enmod rewrite ssl
+    && a2enmod rewrite ssl \
+    && a2enflag SSL
 
 COPY horde-vhost.conf /etc/apache2/vhosts.d/
 
