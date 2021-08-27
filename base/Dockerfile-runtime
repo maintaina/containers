@@ -56,7 +56,9 @@ RUN zypper --non-interactive ref && zypper --non-interactive install --no-recomm
     && /usr/local/bin/composer-installer \
     && mkdir -p /srv/original_config/apps \
     && git clone --depth 5 https://github.com/maintaina-com/horde-deployment -b FRAMEWORK_6_0 /srv/www/horde \
-    && composer install -n ; composer clear-cache ; rm -rf /root/.composer/cache \
+    && composer --no-interaction install \
+    && composer --no-interaction clear-cache \
+    && rm -rf /root/.composer/cache \
     && chown -R wwwrun:www /srv/www/horde
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
