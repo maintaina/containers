@@ -26,7 +26,7 @@ echo "export PATH=\$PATH:/srv/www/horde/vendor/bin" > /root/.bashrc
 if [[ ! -z $GITHUB_COMPOSER_TOKEN ]]
 then
     echo "Configuring authentication to Github API for composer"
-    composer config -g github-oauth.github.com $GITHUB_COMPOSER_TOKEN
+    composer --no-interaction config -g github-oauth.github.com $GITHUB_COMPOSER_TOKEN
 fi
 
 
