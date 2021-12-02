@@ -92,5 +92,21 @@ if [[ -v HORDE_ADMIN_USER ]]; then
     php /srv/www/horde/vendor/bin/hordectl patch user $HORDE_ADMIN_USER $HORDE_ADMIN_PASSWORD
 fi
 
+# if ENABLE_DEVELOPER_MODE=yes then install the developer tools marked with yes (e.g. VIM=yes)
+if [[ -v ENABLE_DEVELOPER_MODE && -n "$ENABLE_DEVELOPER_MODE" && $ENABLE_DEVELOPER_MODE == "yes" ]]
+    if [[ -v VIM && -n "$VIM" && $VIM == "yes" ]]
+        zypper -n in vim;
+    fi
+    if [[ -v XDEBUG_PHP7 && -n "$XDEBUG_PHP7" && $XDEBUG_PHP7 == "yes" ]]
+        zypper -n in php7-xdebug;
+    fi
+    if [[ -v XDEBUG_PHP8 && -n "$XDEBUG_PHP7" && $XDEBUG_PHP8 == "yes" ]]
+        zypper -n in php8-xdebug;
+    fi
+    if [[ -v WGET && -n "$WGET" && $WGET == "yes" ]]
+        zypper -n in wget;
+    fi
+fi    
+
 echo "Handing over to pid 1 command"
 exec "$@"
