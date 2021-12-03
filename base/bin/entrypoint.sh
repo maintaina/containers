@@ -93,20 +93,22 @@ if [[ -v HORDE_ADMIN_USER ]]; then
 fi
 
 # if ENABLE_DEVELOPER_MODE=yes then install the developer tools marked with yes (e.g. VIM=yes)
-if [[ -v ENABLE_DEVELOPER_MODE && -n "$ENABLE_DEVELOPER_MODE" && $ENABLE_DEVELOPER_MODE == "yes" ]]
-    if [[ -v VIM && -n "$VIM" && $VIM == "yes" ]]
-        zypper -n in vim;
-    fi
-    if [[ -v XDEBUG_PHP7 && -n "$XDEBUG_PHP7" && $XDEBUG_PHP7 == "yes" ]]
-        zypper -n in php7-xdebug;
-    fi
-    if [[ -v XDEBUG_PHP8 && -n "$XDEBUG_PHP7" && $XDEBUG_PHP8 == "yes" ]]
-        zypper -n in php8-xdebug;
-    fi
-    if [[ -v WGET && -n "$WGET" && $WGET == "yes" ]]
-        zypper -n in wget;
-    fi
+if [[ -v ENABLE_DEVELOPER_MODE && -n "$ENABLE_DEVELOPER_MODE" && $ENABLE_DEVELOPER_MODE == "yes" ]]; then
+	echo "developer mode is enabled: starting installation of developer tools"
+	PHP_VERSION=$(php -r "echo PHP_VERSION;")
+	
+	if [[ $PHP_VERSION == 7.* ]]; then
+		zypper -n in php7-xdebug
+	fi
+	if [[ $PHP_VERSION == 8.* ]]; then
+		zypper -n in php8-xdebug
+	fi
+    zypper -n in vim wget mc iputils curl less bind-utils;
+	echo "ending installatin of developer tools"
+ else
+    echo "developer mode is disabled: no installatin of dev tools"
 fi    
+
 
 echo "Handing over to pid 1 command"
 exec "$@"
