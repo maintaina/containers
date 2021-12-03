@@ -30,6 +30,19 @@ be pulled without logging into the registry.
   The same files will also be copied to the presets/ directory.
   You can re-run this any time using the /usr/local/bin/copy-original-configs script.
 
+## Developer tools
+
+- See the .env file
+- Once the ENABLE_DEVELOPER_MODE is set to yes (default is no), the following tools will be pre-installed into the -web container:
+	+ vim
+	+ midnight-commander
+	+ curl
+	+ wget
+	+ less
+	+ php-debug (for php-7 and php-8)
+	+ bind-utils (like dig)
+	+ ip-utils (like ping)
+
 ## Supported Config Variables
 
 ### GITHUB_COMPOSER_TOKEN
