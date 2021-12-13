@@ -47,6 +47,7 @@ RUN zypper --non-interactive ref && zypper --non-interactive install --no-recomm
     php7-xmlwriter \
     php7-xmlreader \
     php7-zip \
+    php7-zlib \
     tar \
     unzip \
     gettext-tools \
