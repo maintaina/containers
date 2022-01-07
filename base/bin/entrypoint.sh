@@ -96,7 +96,13 @@ if [[ -v ENABLE_DEVELOPER_MODE && -n "$ENABLE_DEVELOPER_MODE" && $ENABLE_DEVELOP
 	if [[ $PHP_VERSION == 8.* ]]; then
 		zypper -n in php8-xdebug
 	fi
-	zypper -n in vim wget mc iputils curl less bind-utils
+	if [[ -v CUSTOM_TOOLS && -n "$CUSTOM_TOOLS" ]]; then
+		zypper -n in vim wget mc iputils curl less bind-utils "$CUSTOM_TOOLS"
+	else
+		zypper -n in vim wget mc iputils curl less bind-utils 
+	fi
+
+	
 	echo "ending installation of developer-tools"
 else
 	echo "developer-mode is disabled: no installation of dev-tools"
