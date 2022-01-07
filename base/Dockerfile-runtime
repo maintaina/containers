@@ -1,4 +1,4 @@
-FROM opensuse/leap:15.3
+FROM opensuse/tumbleweed:latest
 
 # set working directory for all subsequent steps (and images derived from this one)
 WORKDIR /srv/www/horde
