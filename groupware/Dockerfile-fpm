@@ -1,6 +1,6 @@
-FROM ghcr.io/maintaina/containers/groupware:latest-runtime
+FROM ghcr.io/maintaina/containers/groupware:php80-runtime
 
-RUN zypper --non-interactive install --no-confirm php7-fpm \
+RUN zypper --non-interactive install --no-confirm php8-fpm \
     && zypper clean -a 
 
 ## TODO: Deploy fpm config

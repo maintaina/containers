@@ -1,8 +1,8 @@
-FROM ghcr.io/maintaina/containers/groupware-webmail:latest-runtime
+FROM ghcr.io/maintaina/containers/groupware-webmail:php80-runtime
 
-RUN zypper --non-interactive ref && zypper --non-interactive install --no-confirm apache2 apache2-utils apache2-mod_php7 \
+RUN zypper --non-interactive ref && zypper --non-interactive install --no-confirm apache2 apache2-utils apache2-mod_php8 \
     && zypper clean -a \
-    && a2enmod mod_php7 \
+    && a2enmod mod_php8 \
     && a2enmod rewrite \
     && a2enflag SSL
 
