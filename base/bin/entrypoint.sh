@@ -97,7 +97,8 @@ if [[ -v ENABLE_DEVELOPER_MODE && -n "$ENABLE_DEVELOPER_MODE" && $ENABLE_DEVELOP
 		zypper -n in php8-xdebug
 	fi
 	if [[ -v CUSTOM_TOOLS && -n "$CUSTOM_TOOLS" ]]; then
-		zypper -n in vim wget mc iputils curl less bind-utils "$CUSTOM_TOOLS"
+		echo "Custom tools to be installed: $CUSTOM_TOOLS"
+		zypper -n in vim wget mc iputils curl less bind-utils $CUSTOM_TOOLS
 	else
 		zypper -n in vim wget mc iputils curl less bind-utils 
 	fi
