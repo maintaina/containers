@@ -1,6 +1,6 @@
 # horde-composer-docker
 
-A container image based on openSUSE Leap with the Composer-based Horde deployment from [maintaina-com/horde-deployment](https://github.com/maintaina-com/horde-deployment).
+A container image based on openSUSE Tumbleweed and PHP 8.0 with the Composer-based Horde deployment from [maintaina-com/horde-deployment](https://github.com/maintaina-com/horde-deployment).
 The image does not contain a web server.
 
 The image uses Composer 2, installed as shown on [Composer's installation documentation](https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md).
@@ -11,12 +11,12 @@ The repository contains a Github Actions workflow to automatically build the con
 
 To build a another image on top of this one, use the following in your `Dockerfile`:
 ```Docker
-FROM ghcr.io/maintaina/containers/base:latest
+FROM ghcr.io/maintaina/containers/base:php80-runtime
 ```
 
 To start a container based on this image, run:
 ```bash
-docker run -it --name my-horde-container ghcr.io/maintaina/containers/base:latest
+docker run -it --name my-horde-container ghcr.io/maintaina/containers/base:php80-runtime
 ```
 
 The image is stored as a public image in Github's ghcr.io Container Registry. It can
