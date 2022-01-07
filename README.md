@@ -7,7 +7,7 @@ Currently, the base image is openSUSE LEAP 15.3
 
 ## base
 
-A horde environment with no extra apps installed
+A horde environment with no extra apps installed.
 
 Flavors:
  - runtime
@@ -26,7 +26,7 @@ Flavors:
 
 ## groupware-webmail
 
-Like groupware, but added webmail (imp) and mail filters (ingo)
+Like groupware, but added webmail (imp) and mail filters (ingo).
 
 Flavors:
  - runtime
