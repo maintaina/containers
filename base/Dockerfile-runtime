@@ -13,6 +13,7 @@ RUN chmod -R +x /usr/local/bin/*
 # then creates the target directory for horde and clones the deployment
 
 RUN zypper --non-interactive --gpg-auto-import-keys refresh \
+    && zypper --non-interactive dist-upgrade --no-confirm \
     && zypper --non-interactive install --no-recommends --no-confirm \
         git-core \
         gzip \
