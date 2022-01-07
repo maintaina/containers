@@ -43,6 +43,10 @@ be pulled without logging into the registry.
 	+ bind-utils (like dig)
 	+ ip-utils (like ping)
 
+- For installation of other tools use **CUSTOM_TOOLS**, for example **CUSTOM_TOOLS=neofetch** (note: correct names for installation can be found on the [opensuse repositiories](https://software.opensuse.org/))
+
+- For more suggestions please report in an issue
+
 ## Supported Config Variables
 
 ### GITHUB_COMPOSER_TOKEN
