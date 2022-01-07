@@ -5,7 +5,7 @@ on:
   push:
     # Publish `master` as Docker `latest` image.
     branches:
-      - master
+      - php80
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -50,11 +50,11 @@ jobs:
 
      ## Spend time in a useful way
       - name: Pull most recent image
-        run: docker pull ghcr.io/maintaina/containers/base:latest-runtime
+        run: docker pull ghcr.io/maintaina/containers/base:php80-runtime
 
       - name: Check if the base image is old and try a couple of times if a newer image gets available
         run: |
-          IMAGE=ghcr.io/${{ github.repository }}/base:latest-runtime
+          IMAGE=ghcr.io/${{ github.repository }}/base:php80-runtime
           echo "Base image is: $IMAGE"
           AGE_THRESHOLD=5000
           SLEEP_DURATION=180
