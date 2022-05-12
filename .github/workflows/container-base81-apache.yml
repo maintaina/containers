@@ -1,4 +1,4 @@
-name: Horde Base PHP 8.1 Apache Image
+name: Horde Base PHP 8.1/TW Apache Image
 
 on:
   push:

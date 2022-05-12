@@ -1,4 +1,4 @@
-name: Horde Groupware Apache Image
+name: Horde Groupware PHP 8.1/TW Apache Image
 
 on:
   push:
