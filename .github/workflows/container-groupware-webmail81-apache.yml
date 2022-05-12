@@ -18,7 +18,7 @@ on:
     - cron: '15 2 * * *'
 
 env:
-  IMAGE_NAME: groupware-webmail
+  IMAGE_NAME: groupware-webmail81
 
 jobs:
   # Run tests.
@@ -50,11 +50,11 @@ jobs:
 
      ## Spend time in a useful way
       - name: Pull most recent image
-        run: docker pull ghcr.io/maintaina/containers/groupware-webmail:latest-runtime
+        run: docker pull ghcr.io/maintaina/containers/groupware-webmail81:latest-runtime
 
       - name: Check if the base image is old and try a couple of times if a newer image gets available
         run: |
-          IMAGE=ghcr.io/${{ github.repository }}/groupware-webmail:latest-runtime
+          IMAGE=ghcr.io/${{ github.repository }}/groupware-webmail81:latest-runtime
           echo "Base image is: $IMAGE"
           AGE_THRESHOLD=3600
           SLEEP_DURATION=180
