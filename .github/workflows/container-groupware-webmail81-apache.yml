@@ -1,5 +1,5 @@
 ---
-name: Horde Groupware with Webmail Apache Image
+name: Horde Groupware with Webmail PHP 8.1/TW Apache Image
 
 on:
   push:

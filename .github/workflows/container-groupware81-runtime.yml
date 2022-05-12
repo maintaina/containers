@@ -1,5 +1,5 @@
 ---
-name: Horde Groupware Runtime Image
+name: Horde Groupware PHP8.1/TW Runtime Image
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Horde Base PHP 8.1 Runtime Image
+name: Horde Base PHP 8.1/TW Runtime Image
 
 on:
   push:
