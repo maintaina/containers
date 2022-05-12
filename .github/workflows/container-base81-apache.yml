@@ -1,0 +1,127 @@
+name: Horde Base PHP 8.1 Apache Image
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+  ## On manual dispatch
+  workflow_dispatch:
+  schedule:
+    - cron: '15 0 * * *'
+
+env:
+  IMAGE_NAME: base81
+
+jobs:
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  #test:
+  #  runs-on: ubuntu-latest
+
+  #  steps:
+  #    - uses: actions/checkout@v2
+
+  #    - name: Run tests
+  #      run: |
+  #        docker build . --file Dockerfile
+
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push:
+    # Ensure test job passes before pushing image.
+    #needs: test
+
+    runs-on: ubuntu-20.04
+    if: github.event_name == 'push' || github.event_name == 'schedule'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Log into registry
+        run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+
+      ## Spend time in a useful way
+      - name: Pull most recent image
+        run: docker pull ghcr.io/maintaina/containers/base:latest-runtime
+
+      - name: Check if the base image is old and try a couple of times if a newer image gets available
+        run: |
+          IMAGE=ghcr.io/${{ github.repository }}/base:latest-runtime
+          echo "Base image is: $IMAGE"
+          AGE_THRESHOLD=3600
+          SLEEP_DURATION=180
+          SLEEP_REP=10
+
+          get_image_age()
+          {
+            IMAGE_ISODATE=`docker inspect $1 | jq -r .[0].Created`;
+            IMAGE_TS=`date -d $IMAGE_ISODATE +%s`
+            CURRENTDATE_TS=`date +%s`
+            let DIFF_SEC=CURRENTDATE_TS-IMAGE_TS
+            export DIFF_SEC
+          }
+
+          sleep_and_pull()
+          {
+              IMAGE_AGE=$1
+              if [ "$IMAGE_AGE" -gt "$AGE_THRESHOLD" ]; then
+                  echo "Base Image Age $IMAGE_AGE seconds is above threshold $AGE_THRESHOLD - Let's wait a moment and try again"
+                  sleep $SLEEP_DURATION
+                  docker pull $IMAGE
+                  RETURN=1
+              else
+                  echo "Base Image seems recent enough - let's go"
+                  RETURN=0
+              fi
+          }
+
+          echo "Verify if we have a recent base image"
+          for (( i=1; i<=10; i++ ))
+          do
+              echo "Run $i of 10"
+              get_image_age $IMAGE
+              sleep_and_pull $DIFF_SEC
+              if [ "$RETURN" -eq 0 ];
+              then
+                  break;
+              fi
+          done
+          echo "We are OK to build"
+
+      - name: Build image
+        run: ls -lah && cd base/ && ls -lah  && docker build . --file Dockerfile-apache81 --tag image
+
+
+      - name: Push image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag image $IMAGE_ID:$VERSION-apache
+          docker push $IMAGE_ID:$VERSION-apache
+          # Let's use latest as an alias for the apache image
+          docker tag image $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+

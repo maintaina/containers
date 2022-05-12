@@ -1,0 +1,104 @@
+---
+name: Horde Groupware with Webmail Runtime Image
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+  schedule:
+    - cron: '0 2 * * *'
+
+env:
+  IMAGE_NAME: groupware-webmail81
+
+jobs:
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  #test:
+  #  runs-on: ubuntu-latest
+
+  #  steps:
+  #    - uses: actions/checkout@v2
+
+  #    - name: Run tests
+  #      run: |
+  #        docker build . --file Dockerfile
+
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push:
+    # Ensure test job passes before pushing image.
+    #needs: test
+
+    runs-on: ubuntu-20.04
+    if: github.event_name == 'push' || github.event_name == 'schedule'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Log into registry
+        run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # usually, the base image used in Dockerfile is pulled automatically during build
+      # however, there is an issue that prevents buildkit from pulling images from
+      # Github's docker registry so we need to pull the image before building
+      - name: Pull image referenced in Dockerfile
+        run: |
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+
+          # pull the image
+          docker pull ghcr.io/${{ github.repository }}/groupware81:$VERSION-runtime
+
+      - name: Prepare image build
+        run: |
+          mkdir -p --mode=700 ~/.ssh
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          cat > groupware-webmail/secrets.txt <<CONTENT
+          export COMPOSER_AUTH='{"github-oauth": {"github.com": "${{ secrets.COMPOSER_PAT }}"}}'
+          CONTENT
+
+      - name: Build image
+        run: |
+          cd groupware-webmail/
+          DOCKER_BUILDKIT=1 docker build \
+            --secret id=secrets,src=secrets.txt \
+            --file Dockerfile-runtime81 --tag image .
+          rm -rf secrets.txt
+
+      - name: Push image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag image $IMAGE_ID:$VERSION-runtime
+          docker push $IMAGE_ID:$VERSION-runtime

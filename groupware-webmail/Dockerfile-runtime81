@@ -1,0 +1,12 @@
+# syntax = docker/dockerfile:1.0-experimental
+FROM ghcr.io/maintaina/containers/groupware81:latest-runtime
+
+WORKDIR /srv/www/horde
+
+RUN --mount=type=secret,id=secrets,dst=/tmp/secrets.sh source /tmp/secrets.sh \
+    && composer --no-interaction require horde/imp "^7 || dev-FRAMEWORK_6_0" horde/ingo "^4 || dev-FRAMEWORK_6_0" horde/gollem "^4 || dev-FRAMEWORK_6_0"\
+    && composer --no-interaction clear-cache \
+    && chown -R wwwrun:www /srv/www/horde \
+    && unset COMPOSER_PAT
+
+CMD ["/bin/bash"]
