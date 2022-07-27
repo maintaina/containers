@@ -3,7 +3,7 @@
 This repository maintains several container images useful to deploy *developer versions* of Horde Framework or Horde Groupware.
 These image builds are based on the openSUSE distribution's official container images.
 
-Currently, the base image is openSUSE LEAP 15.3
+Currently, the base image is openSUSE LEAP 15.3. Beta images with Tumbleweed and PHP 8 are built separately.
 
 ## base
 
