@@ -8,12 +8,14 @@ do
     mkdir -p /srv/www/horde/presets/$app
     for file in *
     do
-        if [ -f "/srv/www/horde/web/$app/config/$file" ]; then
+        if [ -f "/srv/www/horde/web/var/config/$app/$file" ]; then
             echo "$app/config/$file already exists"
         else
             cp -ar $file /srv/www/horde/presets/$app/$file
             chown wwwrun /srv/www/horde/presets/$app/$file
-            cp -ar $file /srv/www/horde/web/$app/config/$file
+            mkdir -p /srv/www/horde/var/config/$app
+            ## This should be covered by modern versions of the installer plugin but just in case
+            cp -ar $file /srv/www/horde/var/config/$app/$file
             chown wwwrun /srv/www/horde/web/$app/config/$file
         fi
     done
@@ -25,22 +27,22 @@ if [[ -v EXPAND_CONFIGS ]]; then
     echo "EXPANDING CONFIG VARIABLES"
     if [[ -v MYSQL_DATABASE ]]; then
         echo 
-        sed -i "s/conf\['sql'\]\['database'\].*/conf['sql']['database'] = '$MYSQL_DATABASE';/g" /srv/www/horde/web/horde/config/conf.php
+        sed -i "s/conf\['sql'\]\['database'\].*/conf['sql']['database'] = '$MYSQL_DATABASE';/g" /srv/www/horde/var/config/horde/conf.php
         sed -i "s/conf\['sql'\]\['database'\].*/conf['sql']['database'] = '$MYSQL_DATABASE';/g" /srv/www/horde/presets/horde/conf.php
     fi
     if [[ -v MYSQL_HOSTNAME ]]; then
         echo 
-        sed -i "s/conf\['sql'\]\['hostspec'\].*/conf['sql']['hostspec'] = '$MYSQL_HOSTNAME';/g" /srv/www/horde/web/horde/config/conf.php
+        sed -i "s/conf\['sql'\]\['hostspec'\].*/conf['sql']['hostspec'] = '$MYSQL_HOSTNAME';/g" /srv/www/horde/var/config/horde/conf.php
         sed -i "s/conf\['sql'\]\['hostspec'\].*/conf['sql']['hostspec'] = '$MYSQL_HOSTNAME';/g" /srv/www/horde/presets/horde/conf.php
     fi
     if [[ -v MYSQL_USER ]]; then
         echo 
-        sed -i "s/conf\['sql'\]\['username'\].*/conf['sql']['username'] = '$MYSQL_USER';/g" /srv/www/horde/web/horde/config/conf.php
+        sed -i "s/conf\['sql'\]\['username'\].*/conf['sql']['username'] = '$MYSQL_USER';/g" /srv/www/horde/var/config/horde//conf.php
         sed -i "s/conf\['sql'\]\['username'\].*/conf['sql']['username'] = '$MYSQL_USER';/g" /srv/www/horde/presets/horde/conf.php
     fi
     if [[ -v MYSQL_PASSWORD ]]; then
         echo 
-        sed -i "s/conf\['sql'\]\['password'\].*/conf['sql']['password'] = '$MYSQL_PASSWORD';/g" /srv/www/horde/web/horde/config/conf.php
+        sed -i "s/conf\['sql'\]\['password'\].*/conf['sql']['password'] = '$MYSQL_PASSWORD';/g" /srv/www/horde/var/config/horde/conf.php
         sed -i "s/conf\['sql'\]\['password'\].*/conf['sql']['password'] = '$MYSQL_PASSWORD';/g" /srv/www/horde/presets/horde/conf.php
     fi
 fi
