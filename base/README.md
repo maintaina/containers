@@ -30,6 +30,8 @@ be pulled without logging into the registry.
   The same files will also be copied to the presets/ directory.
   You can re-run this any time using the /usr/local/bin/copy-original-configs script.
 
+If you have custom logic that adds content late in the bootstrapping process or over the lifetime of the container, run the ```omposer horde-reconfigure``` command to fix up any linking into the ephemeral /srv/www/horde/web/ area. Any content directly deployed to this location will be lost on every install, upgrade or deletion of dependencies.
+
 ## Developer tools
 
 - See the .env file
