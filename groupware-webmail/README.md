@@ -8,7 +8,7 @@ Flavours:
 - containers/groupware-webmail81:latest-runtime on openSUSE Tumbleweed and PHP 8.1
 - containers/groupware-webmail81:latest-apache the same, but running an Apache2 after bootstrap
 
-Images with a PHP-FPM daemon are not yet provided
+Images with a PHP-FPM daemon are not yet provided.
 
 The image uses Composer 2, installed as shown on [Composer's installation documentation](https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md).
 
@@ -43,7 +43,7 @@ If you have custom logic that adds content late in the bootstrapping process or 
 
 ## Developer tools
 
-- See the .env file
+- See the .env file of the horde-deployment repo.
 - Once the ENABLE_DEVELOPER_MODE is set to yes (default is no), the entrypoint script will install these tools before bootstrapping the apache webserver:
 	+ vim
 	+ midnight-commander
