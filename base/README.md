@@ -78,8 +78,10 @@ The $conf['auth']['admin'] setting will not be changed. A default installation w
 
 ### Variants
 
-- php cli runtime only
-- with apache webserver and mod_php
-- with php-fpm
+- base:latest-runtime php cli runtime only, openSUSE Leap 15.3 with PHP 7.4
+- base81:latest-runtime php cli runtime only, openSUSE Tumbleweed with PHP 8.1
+- base:latest-apache is base:latest-runtime with apache webserver and mod_php
+- base81:latest-apache is base81:latest-runtime with apache webserver and mod_php
+- with php-fpm TBD
 
 ### Example deployments
