@@ -55,6 +55,14 @@ if [[ -f "/usr/local/bin/composer-on-bootstrap" ]]; then
     /usr/local/bin/composer-on-bootstrap
 fi
 
+## Optimize autoloader for production mode, but not in developer mode.
+if [[ -v ENABLE_DEVELOPER_MODE && -n "$ENABLE_DEVELOPER_MODE" && $ENABLE_DEVELOPER_MODE == "yes" ]]; then
+    /usr/local/bin/composer dump-autoload -d /srv/www/horde
+else 
+    ## Consider if we want to be even faster but less flexible and run -a and --apcu
+    /usr/local/bin/composer dump-autoload -o -d /srv/www/horde/
+fi
+
 ## TODO: BACKGROUND THIS and everything besides making the main process pid 1
 ## Wait for DB connection to succeed
 ## TODO: Make this optional for No-DB scenarios
