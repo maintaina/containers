@@ -32,7 +32,13 @@ be pulled without logging into the registry.
 
 If you have custom logic that adds content late in the bootstrapping process or over the lifetime of the container, run the ```omposer horde-reconfigure``` command to fix up any linking into the ephemeral /srv/www/horde/web/ area. Any content directly deployed to this location will be lost on every install, upgrade or deletion of dependencies.
 
-## Developer tools
+### Autoloader optimization
+
+If the ENABLE_DEVELOPER_MODE environment variable is NOT set to "yes", the web container's autoloader is set to "optimized" mode level 1 as described in https://getcomposer.org/doc/articles/autoloader-optimization.md
+
+If developer mode is activated, the autoloader will be dumped without this flag.
+
+### Developer tools
 
 - See the .env file
 - Once the ENABLE_DEVELOPER_MODE is set to yes (default is no), the following tools will be pre-installed into the -web container:
