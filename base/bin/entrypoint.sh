@@ -1,5 +1,57 @@
 #!/usr/bin/env bash
 echo "Config stage"
+# if ENABLE_DEVELOPER_MODE=yes then install the developer tools marked with yes (e.g. VIM=yes)
+if [[ -v ENABLE_DEVELOPER_MODE && -n "$ENABLE_DEVELOPER_MODE" && $ENABLE_DEVELOPER_MODE == "yes" ]]; then
+    echo "developer-mode is enabled: starting installation of developer-tools"
+    PHP_VERSION=$(php -r "echo PHP_VERSION;")
+
+    if [[ $PHP_VERSION == 7.* ]]; then
+        zypper -n install php7-xdebug
+    fi
+    if [[ $PHP_VERSION == 8.* ]]; then
+        zypper -n install php8-xdebug
+    fi
+
+    xdebug_major_version="$(rpm -qa '*xdebug*' --qf "%{VERSION}\n" | cut -d'.' -f1)"
+    if [[ $xdebug_major_version -eq 2 ]]; then
+        # configuration for Xdebug 2.9.5 as distributed by openSUSE Leap 15.3
+        {
+            echo "xdebug.remote_enable = 1";
+            echo "xdebug.remote_autostart = 1";
+            echo "xdebug.remote_port = 9000";
+        } >> /etc/php7/conf.d/xdebug.ini
+    elif [[ $xdebug_major_version -eq 3 ]]; then
+        # NOTE: untested as of 2022-03-04, as only Tumbleweed has Xdebug 3
+        {
+            echo "xdebug.mode = develop,debug";
+            echo "xdebug.start_with_request = yes";
+        } >> /etc/php7/conf.d/xdebug.ini
+    fi
+    unset xdebug_major_version
+
+    zypper -n install vim vim-data wget mc iputils curl less bind-utils
+    wget -O phive.phar https://phar.io/releases/phive.phar
+    wget -O phive.phar.asc https://phar.io/releases/phive.phar.asc
+#    gpg --keyserver hkps://keys.openpgp.org --recv-keys 0x9D8A98B29B2D5D79
+#    gpg --verify phive.phar.asc phive.phar
+    chmod +x phive.phar
+    mv phive.phar /usr/local/bin/phive
+    ## Unit Tester
+    phive install -g --trust-gpg-keys 4AA394086372C20A --copy phpunit
+    ## Statical analyzer
+    phive install -g --trust-gpg-keys CF1A108D0E7AE720 --copy phpstan
+    ## Coding Standards
+    phive install -g --trust-gpg-keys E82B2FB314E9906E --copy php-cs-fixer
+    ## phar builder
+    phive install -g --trust-gpg-keys 2DF45277AEF09A2F --copy humbug/box
+    ## horde-components manual build
+    wget https://horde-satis.maintaina.com/horde-components -O /usr/local/bin/horde-components ; chmod +x /usr/local/bin/horde-components
+
+    echo "ending installation of developer-tools"
+else
+    echo "developer-mode is disabled: no installation of dev-tools"
+fi
+
 
 ## copy files from /srv/original_config/apps to config dirs
 /usr/local/bin/copy-original-configs
@@ -92,42 +144,6 @@ fi
 if [[ -v HORDE_ADMIN_USER ]]; then
     echo "Injecting Admin User $HORDE_ADMIN_USER"
     php /srv/www/horde/vendor/bin/hordectl patch user "$HORDE_ADMIN_USER" "$HORDE_ADMIN_PASSWORD"
-fi
-
-# if ENABLE_DEVELOPER_MODE=yes then install the developer tools marked with yes (e.g. VIM=yes)
-if [[ -v ENABLE_DEVELOPER_MODE && -n "$ENABLE_DEVELOPER_MODE" && $ENABLE_DEVELOPER_MODE == "yes" ]]; then
-    echo "developer-mode is enabled: starting installation of developer-tools"
-    PHP_VERSION=$(php -r "echo PHP_VERSION;")
-
-    if [[ $PHP_VERSION == 7.* ]]; then
-        zypper -n install php7-xdebug
-    fi
-    if [[ $PHP_VERSION == 8.* ]]; then
-        zypper -n install php8-xdebug
-    fi
-
-    xdebug_major_version="$(rpm -qa '*xdebug*' --qf "%{VERSION}\n" | cut -d'.' -f1)"
-    if [[ $xdebug_major_version -eq 2 ]]; then
-        # configuration for Xdebug 2.9.5 as distributed by openSUSE Leap 15.3
-        {
-            echo "xdebug.remote_enable = 1";
-            echo "xdebug.remote_autostart = 1";
-            echo "xdebug.remote_port = 9000";
-        } >> /etc/php7/conf.d/xdebug.ini
-    elif [[ $xdebug_major_version -eq 3 ]]; then
-        # NOTE: untested as of 2022-03-04, as only Tumbleweed has Xdebug 3
-        {
-            echo "xdebug.mode = develop,debug";
-            echo "xdebug.start_with_request = yes";
-        } >> /etc/php7/conf.d/xdebug.ini
-    fi
-    unset xdebug_major_version
-
-    zypper -n install vim vim-data wget mc iputils curl less bind-utils
-
-    echo "ending installation of developer-tools"
-else
-    echo "developer-mode is disabled: no installation of dev-tools"
 fi
 
 # if CUSTOM_TOOLS is not empty try to install them
