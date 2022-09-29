@@ -4,6 +4,7 @@ This repository maintains several container images useful to deploy *developer v
 These image builds are based on the openSUSE distribution's official container images.
 
 Currently, the base image is openSUSE LEAP 15.3 for the normal flavour and Beta images with Tumbleweed and PHP 8 are built separately.
+At some point, the PHP 7.4 container builds may be dropped.
 
 ## base
 
