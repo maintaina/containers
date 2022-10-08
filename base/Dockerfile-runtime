@@ -63,5 +63,7 @@ RUN zypper --non-interactive ref && zypper --non-interactive install --no-recomm
     && rm -rf /root/.composer/cache \
     && chown -R wwwrun:www /srv/www/horde
 
+COPY ./php7 /etc/php7
+
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/bin/bash"]
