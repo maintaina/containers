@@ -17,6 +17,7 @@ RUN zypper --non-interactive ref && zypper --non-interactive install --no-recomm
     system-user-wwwrun \
     gzip \
     php8 \
+    php8-APCu \
     php8-bcmath \
     php8-bz2 \
     php8-ctype \

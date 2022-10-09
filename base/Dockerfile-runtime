@@ -16,6 +16,7 @@ RUN zypper --non-interactive ref && zypper --non-interactive install --no-recomm
     git-core \
     gzip \
     php7 \
+    php7-APCu \
     php7-bcmath \
     php7-bz2 \
     php7-ctype \
